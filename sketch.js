@@ -1,42 +1,31 @@
+let synths = [];
 
+function setup(){
+  for(let i =0; i < 5; i++){synths[i] = new Osc(0.5)}
 
-function setup() {
-  createCanvas(400, 400);
 }
 
-function draw() {
-  background(220);
-  
-  rect (50, 100, 100, 100);
-  
-  let dia1;
-  let pos1;
-  let pos2;
-  
-  
-  if(mouseX>50 &&
-    mouseX<150 &&
-    mouseY>100 &&
-    mouseY<200){
-     dia1 = 20;
-     }else{dia1 =40;}
-  
-   if(mouseX>100 &&
-    mouseX<200 &&
-    mouseY>150 &&
-    mouseY<175){
-     pos1 = 220;
-     }else{pos1 =50;}
+function draw(){
+  for(let i =0; i < 5; i++){
+  synths[i].modulate();
+}
+}
 
-    
-   if(mouseX>150 &&
-    mouseX<200 &&
-    mouseY>50 &&
-    mouseY<75){
-     pos2 = 220;
-     }else{pos2 =140;}
-  
-  circle (pos1, pos2, dia1);
-  
-  console.log([mouseX, mouseY]);
+class Osc {
+  constructor(freq){
+    this.freq = freq;
+    this.osc1 = new p5.Oscillator('sine');
+    this.osc1.start();
+    this.osc1.freq(random(200,1000));
+    this.mod1 = new p5.Oscillator('sine');
+    this.mod1.start();
+    this.mod1.amp(100);
+    this.mod1.freq(this.freq);
+    this.mod1.disconnect();
+    this.osc1.amp(this.mod1);
+  }
+  modulate(){
+    this.mod1.amp(map(mouseX,0,400,10,500))
+    this.mod1.freq(map(mouseY,0,400,0.5,15))
+  }
 }
